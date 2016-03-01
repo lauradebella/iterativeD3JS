@@ -61,42 +61,50 @@
         }
       ];
 
-      //adding a key value, manually to data
-      flowers.map(function(flower){
-        flower["value"] = Math.floor(Math.random() * 100) + 1 ;
-        return flower;
-      });
 
       var width = window.innerWidth ,
-          height = window.innerHeight,
-          bar_width = width / flowers.length;
-
-        //extent - pega os valores 
-      var flower_domain = d3.extent(flowers, function(d){
-        return d.value;
-      });
-
-      console.log(flower_domain);
-
-      var bar_height = d3.scale.linear()
-        .domain(flower_domain)
-        .range([0, height]);
+          height = window.innerHeight;
 
       var svg = d3.select("#content").append("svg")
         .attr("viewBox", "0 0 "+ width+ " "+height)
         .attr("width", width)
         .attr("height", height);
 
-      var rects = svg.selectAll("rect")
-        .data(flowers)
-        .enter()
-        .append("rect");
+      function update(new_data){
 
-      rects
-        .attr("x", function(d,i){ return i * bar_width ;})
-        .attr("y", function(d) {return height - bar_height(d["value"]);})
-        .attr("width", bar_width)
-        .attr("height", function(d){ return bar_height(d["value"]); });
+        //adding a key value, manually to data
+        flowers.map(function(flower){
+          if(!flower["value"]){
+            flower["value"] = Math.floor(Math.random() * 100) + 1 ;
+          } 
+          return flower;
+        });
+        
+        //extent - pega os valores 
+        var flower_domain = d3.extent(new_data, function(d){
+          return d.value;
+        });
+
+        var bar_width = width / new_data.length;
+
+        var bar_height = d3.scale.linear()
+          .domain(flower_domain)
+          .range([0, height]);
+
+        var rects = svg.selectAll("rect")
+          .data(new_data);
+
+        rects.enter()
+          .append("rect");
+
+        rects
+          .attr("x", function(d,i){ return i * bar_width ;})
+          .attr("y", function(d) {return height - bar_height(d["value"]);})
+          .attr("width", bar_width)
+          .attr("height", function(d){ return bar_height(d["value"]); });
+      }
+
+      update(flowers);
 
     </script>
   </body>
