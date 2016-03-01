@@ -63,12 +63,24 @@
 
       //adding a key value, manually to data
       flowers.map(function(flower){
-        flower["value"] = Math.floor(Math.random() * 100) + 1;
+        flower["value"] = Math.floor(Math.random() * 100) + 1 ;
         return flower;
       });
 
-      var width = 500,
-          height = 300;
+      var width = window.innerWidth ,
+          height = window.innerHeight,
+          bar_width = width / flowers.length;
+
+        //extent - pega os valores 
+      var flower_domain = d3.extent(flowers, function(d){
+        return d.value;
+      });
+
+      console.log(flower_domain);
+
+      var bar_height = d3.scale.linear()
+        .domain(flower_domain)
+        .range([0, height]);
 
       var svg = d3.select("#content").append("svg")
         .attr("viewBox", "0 0 "+ width+ " "+height)
@@ -81,10 +93,10 @@
         .append("rect");
 
       rects
-        .attr("x", function(d,i){ return i*20;})
-        .attr("y", function(d) {return height - d["value"];})
-        .attr("width", 20)
-        .attr("height", function(d){ return d["value"]; });
+        .attr("x", function(d,i){ return i * bar_width ;})
+        .attr("y", function(d) {return height - bar_height(d["value"]);})
+        .attr("width", bar_width)
+        .attr("height", function(d){ return bar_height(d["value"]); });
 
     </script>
   </body>
