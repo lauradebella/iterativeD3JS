@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page Title</title>
+    <meta charset="utf-8">
+    <script src="/d3.min.js"></script>
+  </head>
+  <body>
+    <div id="content">
+      <h1>Page Title</h1>
+    </div>
+    <script>
+      var flowers = [
+        {
+          "name": "Hydrangia",
+          "latin": "Hydrangea",
+          "light": "Sun",
+          "ease": 3
+        },
+        {
+          "name": "Chrysanthemum",
+          "latin": "Chrysanthemum",
+          "light": "Part Sun",
+          "ease": 1
+        },
+        {
+          "name": "Peony",
+          "latin": "Paeonia",
+          "light": "Part Sun",
+          "ease": -1
+        },
+        {
+          "name": "Orchid",
+          "latin": "Paeonia",
+          "light": "Shade",
+          "ease": -5
+        },
+        {
+          "name": "Fern",
+          "latin": "Dryopteris",
+          "light": "Shade",
+          "ease": 5
+        },
+        {
+          "name": "Rose",
+          "latin": "Rosa",
+          "light": "Sun",
+          "ease": -4
+        },
+        {
+          "name": "Tulip",
+          "latin": "Tulipa",
+          "light": "Sun",
+          "ease": -2
+        },
+        {
+          "name": "Daisy",
+          "latin": "Bellis perennis",
+          "light": "Part Sun",
+          "ease": 4
+        }
+      ];
+
+      //adding a key value, manually to data
+      flowers.map(function(flower){
+        flower["value"] = Math.floor(Math.random() * 100) + 1;
+        return flower;
+      });
+
+      var width = 500,
+          height = 300;
+
+      var svg = d3.select("#content").append("svg")
+        .attr("viewBox", "0 0 "+ width+ " "+height)
+        .attr("width", width)
+        .attr("height", height);
+
+      var rects = svg.selectAll("rect")
+        .data(flowers)
+        .enter()
+        .append("rect");
+
+      rects
+        .attr("x", function(d,i){ return i*20;})
+        .attr("y", function(d) {return height - d["value"];})
+        .attr("width", 20)
+        .attr("height", function(d){ return d["value"]; });
+
+    </script>
+  </body>
+</html>
