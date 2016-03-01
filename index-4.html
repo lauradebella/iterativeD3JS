@@ -63,7 +63,8 @@
 
 
       var width = window.innerWidth ,
-          height = window.innerHeight;
+          height = window.innerHeight,
+          padding = Math.floor(width * 0.01);
 
       var svg = d3.select("#content").append("svg")
         .attr("viewBox", "0 0 "+ width+ " "+height)
@@ -94,14 +95,34 @@
         var rects = svg.selectAll("rect")
           .data(new_data);
 
+        var text = svg.selectAll("text")
+          .data(new_data, function(d){ return d["name"]; });
+
         rects.enter()
           .append("rect");
 
+        text.enter()
+          .append("text")
+          .attr("fill", "white");
+
+        //ocorre on enter e update
         rects
           .attr("x", function(d,i){ return i * bar_width ;})
           .attr("y", function(d) {return height - bar_height(d["value"]);})
-          .attr("width", bar_width)
+          .attr("width", bar_width - padding)
           .attr("height", function(d){ return bar_height(d["value"]); });
+
+        text
+          .text(function(d){ return d["value"]; })
+          .attr("x", function(d,i){ return i * bar_width + (bar_width - padding) / 2;})
+          .attr("y", height - 12)
+          .attr("font-family", "sans-serif")
+          .attr("font-size", "12px")
+          .attr("text-anchor", "middle");
+
+        //on exit
+        rects.exit().remove();
+        text.exit().remove();
       }
 
       update(flowers);
