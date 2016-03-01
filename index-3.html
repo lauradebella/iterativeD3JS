@@ -1,27 +1,57 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>All About SVG</title>
+    <title>SVG with D3</title>
     <meta charset="utf-8">
     <script src="/d3.min.js"></script>
   </head>
   <body>
     <div id="content">
-      <h1>All About SVG</h1>
-      <svg widht="300px" height="100px" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" y="0" width="100" height="50" fill="blue" opacity="0.5"/>
-        <circle cx="160" cy="60" r="20" stroke="red" stroke-width="4" fill="orange"/>
-        <ellipse cx="160" cy="20" rx="20" ry="10" fill="green"/>
-        <line x1="0" y1="80" x2="300" y2="0" stroke="black" stroke-width="2"/>
-        <text x="50" y="50">
-          <tspan x="10">Hello World </tspan>
-          <tspan x="10" dy="15">alallalallallalalalalalalalal </tspan>
-          <tspan x="10" dy="15">lalallalal lalallala  </tspan>
-        </text>
-      </svg>
+      <h1>SVG with D3</h1>
     </div>
     <script>
+        var xmlns = "http://www.w3.org/2000/svg";
+        var stage_w = 100;
+        var stage_h = 100;
 
+        var new_stage = d3.select("body").append("svg")
+
+        new_stage
+          .attr("viewBox", "0 0 "+ stage_w + " " + stage_h)
+          .attr("width", stage_w)
+          .attr("height", stage_h);
+
+        var new_rect = new_stage.append("rect");
+
+        new_rect.attr({
+          "height": 40,
+          "width": 80,
+          "x": 0,
+          "y": 20,
+          "fill": "red"
+        });
+
+        stage_w = stage_w *5;
+        var my_data = [1,2,3,4,5,6];
+
+        var another_stage = d3.select("body").append("svg");
+
+        another_stage
+          .attr("viewBox", "0 0 "+stage_w+" "+stage_h)
+          .attr("width", stage_w)
+          .attr("height", stage_h);
+
+        var squares = another_stage.selectAll("rect")
+          .data(my_data)
+          .enter()
+          .append("rect");
+
+        squares
+          .attr("fill", "red")
+          .attr("x", function(d){ return Math.pow(2,d) * 5 })
+          .attr("y", stage_h/2)
+          .attr("height", function(d){ return Math.pow(2,d);})
+          .attr("width", function(d){ return Math.pow(2,d);});
     </script>
   </body>
 </html>
