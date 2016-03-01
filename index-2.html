@@ -4,6 +4,34 @@
     <title>My Favorite Flowers</title>
     <meta charset="utf-8">
     <script src="/d3.min.js"></script>
+    <style type="text/css">
+      body{
+        font-size: 16px;
+        line-height: 1.5em;
+        color: #333333;
+        font-family: 'Helvetica Neue', Helvetica, sans-serif;
+      }
+      div#content{
+        margin: auto;
+        width: 800px;
+      }
+      div#content > h1{
+        margin: 20px;
+        text-align: center;
+      }
+      div#content > div.flower > *{
+        margin:0;
+      }
+      div#content > div.flower{
+        display: inline-block;
+        padding: 15px 20px;
+        margin: 10px;
+        vertical-align: top;
+      }
+      div#content div.flower > img{
+        width: 200px;
+      }
+    </style>
   </head>
   <body>
     <div id="content">
@@ -45,6 +73,9 @@
         }
       ];
 
+      var color = d3.scale.linear()
+        .domain([-5, 0, 5])
+        .range(["red", "white", "green"]);
 
       var div = d3.select("div#content")
         //seleciona ate elementos que ainda nao existem
@@ -53,6 +84,47 @@
         .data(flowers)
         //coloca os elementos novos
         .enter().append("div").attr("class","flower");
+
+      div.append("h2").text(function(data, index){
+        return data.name;
+        //console.log(data,index);
+      });
+
+      div.append("p").append("i").text(function(d){
+        return d.latin;
+      });
+
+      div.append("img").attr("src", function(d){
+        return "img/"+d.name.toLowerCase()+".jpg";
+      });
+
+      div.append("p").text(function(d){ return d.light;});
+
+      div.style("background-color", function(d){return color(d.ease);});
+
+      var legend_div = d3.select("div#content")
+        .append("div")
+        .attr("id", "legend");
+
+      legend_div.append("h2").text("Ease of Care Legend");
+
+      var span = d3.select("div#legend")
+        .selectAll("span")
+        .data(d3.range(-5,6))
+        .enter().append("span");
+
+      span.style("background-color", function(d){ return color(d);})
+        .style("width", "30px")
+        .style("height", "30px")
+        .style("display", "inline-block")
+        .style("text-align", "center")
+        .style("vertical-align", "middle")
+        .text(function(d){
+            if(d == -5 || d == 0 || d==5){
+              return d;
+            }
+        });
+
 
     </script>
   </body>
